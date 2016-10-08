@@ -1,8 +1,7 @@
 // import Backbone from 'backbone'
 import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
-import {Router, Route, IndexRoute, hashHistory, Link} from 'react-router'
-import {Nav, NavItem} from 'react-bootstrap'
+import {Router, Route, IndexRedirect, hashHistory, Link} from 'react-router'
 // <script type="text/jsx">
 //   // React Code Goes Here
 //   ReactDOM.render(
@@ -69,20 +68,6 @@ class AppNav extends Component {
 
   render () {
     return (
-      // <ul>
-      //   <li>
-      //     <a onClick={this.handleClick}>
-      //       <i className='glyphicon glyphicon-globe'/>
-      //       Friends of Friends
-      //     </a>
-      //   </li>
-      //   {this.props.links.map((l) => {
-      //     // assuming unique link text
-      //     return <li key={l} className={this.state.selected == l ? 'active' : ''}>
-      //       <a onClick={this.handleClick}>{l}</a>
-      //     </li>
-      //   })}
-      // </ul>
       <nav>
         <ul>
           {this.props.links.map((l, i) => {
@@ -112,13 +97,13 @@ class App extends Component {
   render () {
     return (
       <div>
-        <header>
+        <section id='sidebar'>
           <h4>
-            <i className='glyphicon glyphicon-globe'/>
             Friends of Friends
+            <span className='smile'>:)</span>
           </h4>
           <AppNav />
-        </header>
+        </section>
         <section id='content'>
           {this.props.children}
         </section>
@@ -134,7 +119,7 @@ class App extends Component {
 ReactDOM.render(
   <Router history={hashHistory}>
     <Route path='/' component={App}>
-      <IndexRoute component={Search} />
+      <IndexRedirect to='search' />
       <Route path='search' component={Search} />
       <Route path='people' component={People} />
     </Route>

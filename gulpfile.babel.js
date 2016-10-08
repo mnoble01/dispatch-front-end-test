@@ -6,7 +6,9 @@ import babelify from 'babelify'
 import livereload from 'gulp-livereload'
 import source from 'vinyl-source-stream'
 import express from 'express'
+import less from 'gulp-less'
 import browserSync from 'browser-sync'
+import cssmin from 'gulp-cssmin'
 
 const SERVER = {
   PORT: 3000,
@@ -20,8 +22,8 @@ const PATHS = {
   APP_ENTRY: path.join(DIRS.SRC, 'app.js'),
   JS: path.join(DIRS.SRC, '**/*.js'),
   HTML: path.join(DIRS.SRC, '**/*.html'),
-  CSS: path.join(DIRS.SRC, '**/*.css'),
-  IMAGES: [path.join(DIRS.SRC, 'favicon.ico')]
+  CSS: path.join(DIRS.SRC, '**/*.less'),
+  IMAGES: [path.join(DIRS.SRC, 'favicon.ico'), path.join(DIRS.SRC, '*images/**/*')]
 }
 
 gulp.task('html', () => {
@@ -31,6 +33,10 @@ gulp.task('html', () => {
 
 gulp.task('css', () => {
   return gulp.src(PATHS.CSS)
+    .pipe(less({
+      paths: ['.', './node_modules/']
+    }))
+    .pipe(cssmin())
     .pipe(gulp.dest(DIRS.DEST))
 })
 
@@ -58,7 +64,7 @@ gulp.task('server', ['build'], () => {
   })
 })
 
-gulp.task('watch', () => {
+gulp.task('watch', ['build'], () => {
   browserSync({server: {
     baseDir: DIRS.DEST
   }})
@@ -66,12 +72,5 @@ gulp.task('watch', () => {
   gulp.watch(PATHS.JS, ['js', browserSync.reload])
   gulp.watch(PATHS.HTML, ['html', browserSync.reload])
   gulp.watch(PATHS.CSS, ['css', browserSync.reload])
+  gulp.watch(PATHS.IMAGES, ['images', browserSync.reload])
 })
-
-
-// gulp.task('watch', ['build'], () => {
-//   livereload.listen()
-//   gulp.watch(PATHS.JS, ['js'])
-//   gulp.watch(PATHS.HTML, ['html'])
-//   gulp.watch(PATHS.CSS, ['css'])
-// })
