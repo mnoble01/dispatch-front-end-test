@@ -1,5 +1,8 @@
+// import Backbone from 'backbone'
 import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
+import {Router, Route, IndexRoute, hashHistory, Link} from 'react-router'
+import {Nav, NavItem} from 'react-bootstrap'
 // <script type="text/jsx">
 //   // React Code Goes Here
 //   ReactDOM.render(
@@ -10,94 +13,52 @@ import ReactDOM from 'react-dom'
 
 console.log('whatup')
 
-// class FriendsApp extends React.Component {
-//   constructor(props) {
-//     console.log('heya')
-//     super(props)
-//     this.handleChange = this.handleChange.bind(this)
-//     this.handleSubmit = this.handleSubmit.bind(this)
-//     this.state = {items: [], text: ''}
-//   }
-
-//   render() {
-//     return (
-//       <div>
-//         <h3>TODO</h3>
-//         <TodoList items={this.state.items} />
-//         <form onSubmit={this.handleSubmit}>
-//           <input onChange={this.handleChange} value={this.state.text} />
-//           <button>{'Add #' + (this.state.items.length + 1)}</button>
-//         </form>
-//       </div>
-//     )
-//   }
-
-//   handleChange(e) {
-//     this.setState({text: e.target.value})
-//   }
-
-//   handleSubmit(e) {
-//     e.preventDefault()
-//     var newItem = {
-//       text: this.state.text,
-//       id: Date.now()
-//     };
-//     this.setState((prevState) => ({
-//       items: prevState.items.concat(newItem),
-//       text: ''
-//     }))
-//   }
-// }
-
-// export default FriendsApp
+// export default App
 // var Chat = require('./Chat');
-// import FriendsApp from 'friends'
+// import App from 'friends'
 
-class Nav extends Component {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      selected: ''
-    }
-
-    this.handleClick = this.handleClick.bind(this)
+class Person extends Component {
+  render () {
+    return (
+      <div>
+        <div className='name'>{this.props.name}</div>
+        <div className='subjects'>{this.props.subjects}</div>
+      </div>
+    )
   }
+}
 
-  static get defaultProps() {
+class People extends Component {
+  static get defaultProps () {
     return {
-      links: []
+      people: []
     }
   }
 
   render () {
     return (
-      <ul className='nav nav-pills nav-stacked'>
-        <li className='sidebar-brand'>
-          <a onClick={this.handleClick}>
-            <i className='glyphicon glyphicon-globe'/>
-            Friends of Friends
-          </a>
-        </li>
-        {this.props.links.map((l) => {
-          // assuming unique link text
-          return <li key={l} className={this.state.selected == l ? 'active' : ''}>
-            <a onClick={this.handleClick}>{l}</a>
-          </li>
-        })}
-      </ul>
+      <div>
+      People
+      {this.props.people.map((p) => {
+        return <Person props={p}/>
+      })}
+      </div>
     )
-  }
-
-  handleClick (event) {
-    console.log('handleClick', arguments)
-    // this.setState({selected: })
-    this.setState({selected: event.currentTarget.dataset.key})
   }
 }
 
-class Sidebar extends Component {
-  static get defaultProps () {
+class Search extends Component {
+  render () {
+    return (
+      <div>
+      Search here
+      </div>
+    )
+  }
+}
+
+class AppNav extends Component {
+  static get defaultProps() {
     return {
       links: [
         'Search',
@@ -108,32 +69,99 @@ class Sidebar extends Component {
 
   render () {
     return (
-      <nav className='col-sm-3 col-md-2 sidebar'>
-        <Nav links={this.props.links} />
+      // <ul>
+      //   <li>
+      //     <a onClick={this.handleClick}>
+      //       <i className='glyphicon glyphicon-globe'/>
+      //       Friends of Friends
+      //     </a>
+      //   </li>
+      //   {this.props.links.map((l) => {
+      //     // assuming unique link text
+      //     return <li key={l} className={this.state.selected == l ? 'active' : ''}>
+      //       <a onClick={this.handleClick}>{l}</a>
+      //     </li>
+      //   })}
+      // </ul>
+      <nav>
+        <ul>
+          {this.props.links.map((l, i) => {
+            // assuming unique link text
+            let href = l.toLowerCase()
+            return <li key={href}>
+              <Link to={href} activeClassName='active'> {l} </Link>
+            </li>
+          })}
+        </ul>
       </nav>
     )
   }
 }
 
-class Friends extends Component {
-  render() {
+class Home extends Component {
+  render () {
     return (
-      <div className='container-fluid'>
-        <div className='row'>
-          <Sidebar />
-          <h3>
-            <i className='glyphicon glyphicon-globe'/>
-            Friends of Friends
-          </h3>
-        </div>
+      <div>
+        Hello and welcome! To begin
       </div>
     )
   }
 }
 
+class App extends Component {
+  render () {
+    return (
+      <div>
+        <header>
+          <h4>
+            <i className='glyphicon glyphicon-globe'/>
+            Friends of Friends
+          </h4>
+          <AppNav />
+        </header>
+        <section id='content'>
+          {this.props.children}
+        </section>
+      </div>
+    )
+  }
+}
+
+
+// ReactDOM.render(
+//   <App />,
+// )
 ReactDOM.render(
-  <Friends />,
+  <Router history={hashHistory}>
+    <Route path='/' component={App}>
+      <IndexRoute component={Search} />
+      <Route path='search' component={Search} />
+      <Route path='people' component={People} />
+    </Route>
+  </Router>,
   document.getElementById('app')
 )
+
+
+// export default {}
+
+// let AppRouter = Backbone.Router.extend({
+//   routes: {
+//     '': 'people',
+//     people: 'people',
+//     search: 'search'
+//   },
+
+//   people () {
+//     console.log('people')
+//   },
+
+//   search () {
+//     console.log('search')
+//   }
+// })
+
+// new AppRouter
+// Backbone.history.start({root: '/'})
 
 export default {}
