@@ -1,8 +1,13 @@
-import BBCollection from 'backbone-collection'
+import Backbone from 'backbone'
 import SubjectModel from 'models/subject'
+import BBLocalStorage from 'backbone.localstorage'
 
-export default SubjectCollection = BBCollection.extend({
+let SubjectCollection = Backbone.Collection.extend({
   model: SubjectModel,
 
-  comparator: 'name'
+  comparator: 'name',
+
+  localStorage: new BBLocalStorage('SubjectCollection')
 })
+
+export default SubjectCollection

@@ -9,7 +9,8 @@
 @white: #FFFDFB;
 @pink: #FDE9DF;
 @yellow: #FFD6A4;
-@gray: #F5F5F5;
+@paleGray: #F5F5F5;
+@gray: darken(@gray, 40%);
 @sidebarSize: 200px;
 @sidebarC: @blue;
 
@@ -59,7 +60,7 @@ body {
   margin: @padding;
   margin-left: @sidebarSize + @padding;
   padding: @padding;
-  background: @gray;
+  background: @paleGray;
   overflow: auto;
   header {
     margin-bottom: @padding;
@@ -83,24 +84,50 @@ a {
   color: lighten(@blue, 5%);
 }
 
+.hint {
+  color: @gray;
+  font-size: 11px;
+}
+
 form {
   @formMargin: @padding/2;
   width: 100%;
   label,
-  .serial-input-wrapper {
+  .serial-input-wrapper,
+  .react-tags {
     display: block;
     float: left;
+  }
+  .react-tags .react-tags__selected:not(:empty) + .react-tags__search {
+    margin-top: @formMargin;
   }
   label {
     clear: left;
     &:not(:first-child) {
       margin-top: @formMargin;
-      + .serial-input-wrapper {
+      + .serial-input-wrapper,
+      + .react-tags {
         margin-top: @formMargin;
       }
     }
-    + .serial-input-wrapper {
+    + .serial-input-wrapper,
+    + .react-tags {
       padding-left: @padding;
+    }
+    .hint {
+      display: block;
+    }
+  }
+  .react-tags {
+    .react-tags__suggestions li mark {
+      /* text-decoration: underline; */
+      background: @pink;
+      font-weight: normal; /* 600 */
+      margin-right: -2px;
+      color: inherit;
+    }
+    .react-tags__selected-tag:not(:first-child) {
+      margin-left: @formMargin/2;
     }
   }
   .serial-input-wrapper .err-msg {
@@ -125,7 +152,7 @@ form {
   &:after {
     content: ' ';
     display: block;
-    background: darken(@gray, 10%);
+    background: darken(@paleGray, 10%);
   }
   &:before {
     width: @userSize/2;
@@ -153,7 +180,7 @@ form {
     width: 100%;
     padding: @padding/2;
     &:not(:last-child) {
-      border-bottom: 1px solid darken(@gray, 10%);
+      border-bottom: 1px solid darken(@paleGray, 10%);
     }
     .name {
       font-weight: bold;

@@ -10,6 +10,11 @@ const NAV_LINKS = [{
   text: 'People',
   path: 'people',
   component: People
+}, {
+  text: 'Make Friends',
+  path: 'friends'
+  // ,
+  // component: Friends
 }]
 
 export default NAV_LINKS
