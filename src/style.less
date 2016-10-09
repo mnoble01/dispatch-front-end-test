@@ -18,6 +18,8 @@ body {
 
 #sidebar {
   position: fixed;
+  top: 0;
+  left: 0;
   min-width: @sidebarSize;
   height: 100%;
   background: @sidebarC;
@@ -48,10 +50,38 @@ body {
 }
 
 #content {
-  width: 100%;
-  height: 100%;
-  margin-left: @sidebarSize;
+  width: auto;
+  min-height: 300px;
+  position: relative;
+  margin: @padding;
+  margin-left: @sidebarSize + @padding;
   padding: @padding;
+  background: @gray;
+  overflow: auto;
+}
+
+.user-icon {
+  @userSize: 90px;
+  width: @userSize;
+  height: @userSize;
+  &:before,
+  &:after {
+    content: ' ';
+    display: block;
+    background: darken(@gray, 10%);
+  }
+  &:before {
+    width: @userSize/2;
+    height: @userSize/2;
+    border-radius: 100%;
+    border: 5px solid inherit; // or white
+    margin: auto;
+  }
+  &:after {
+    width: @userSize;
+    height: @userSize/2;
+    border-radius: @userSize @userSize 0 0;
+  }
 }
 /*@import 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css';
 nav li a {

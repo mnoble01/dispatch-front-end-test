@@ -1,87 +1,11 @@
-// import Backbone from 'backbone'
 import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
-import {Router, Route, IndexRedirect, hashHistory, Link} from 'react-router'
-// <script type="text/jsx">
-//   // React Code Goes Here
-//   ReactDOM.render(
-//     <h1>Hello, world!</h1>,
-//     document.getElementById('app-entry')
-//   )
-// </script>
+import {Router, Route, IndexRedirect, hashHistory} from 'react-router'
+import NAV_LINKS from 'lib/nav-links'
+import Nav from 'components/nav'
+import People from 'components/people'
+import pluck from 'lodash.pluck'
 
-console.log('whatup')
-
-// export default App
-// var Chat = require('./Chat');
-// import App from 'friends'
-
-class Person extends Component {
-  render () {
-    return (
-      <div>
-        <div className='name'>{this.props.name}</div>
-        <div className='subjects'>{this.props.subjects}</div>
-      </div>
-    )
-  }
-}
-
-class People extends Component {
-  static get defaultProps () {
-    return {
-      people: []
-    }
-  }
-
-  render () {
-    return (
-      <div>
-      People
-      {this.props.people.map((p) => {
-        return <Person props={p}/>
-      })}
-      </div>
-    )
-  }
-}
-
-class Search extends Component {
-  render () {
-    return (
-      <div>
-      Search here
-      </div>
-    )
-  }
-}
-
-class AppNav extends Component {
-  static get defaultProps() {
-    return {
-      links: [
-        'Search',
-        'People'
-      ]
-    }
-  }
-
-  render () {
-    return (
-      <nav>
-        <ul>
-          {this.props.links.map((l, i) => {
-            // assuming unique link text
-            let href = l.toLowerCase()
-            return <li key={href}>
-              <Link to={href} activeClassName='active'> {l} </Link>
-            </li>
-          })}
-        </ul>
-      </nav>
-    )
-  }
-}
 
 class Home extends Component {
   render () {
@@ -102,7 +26,7 @@ class App extends Component {
             Friends of Friends
             <span className='smile'>:)</span>
           </h4>
-          <AppNav />
+          <Nav links={pluck(NAV_LINKS, 'text')} />
         </section>
         <section id='content'>
           {this.props.children}
@@ -112,41 +36,16 @@ class App extends Component {
   }
 }
 
-
-// ReactDOM.render(
-//   <App />,
-// )
 ReactDOM.render(
   <Router history={hashHistory}>
     <Route path='/' component={App}>
-      <IndexRedirect to='search' />
-      <Route path='search' component={Search} />
-      <Route path='people' component={People} />
+      <IndexRedirect to={NAV_LINKS[0].path} />
+      {NAV_LINKS.map((link, i) => {
+        return <Route key={link.path} path={link.path} component={link.component} pageTitle={link.text} />
+      })}
     </Route>
   </Router>,
   document.getElementById('app')
 )
-
-
-// export default {}
-
-// let AppRouter = Backbone.Router.extend({
-//   routes: {
-//     '': 'people',
-//     people: 'people',
-//     search: 'search'
-//   },
-
-//   people () {
-//     console.log('people')
-//   },
-
-//   search () {
-//     console.log('search')
-//   }
-// })
-
-// new AppRouter
-// Backbone.history.start({root: '/'})
 
 export default {}
