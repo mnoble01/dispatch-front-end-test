@@ -3,6 +3,7 @@
 @import 'https://fonts.googleapis.com/css?family=Muli:300|Cabin+Sketch';
 
 
+@black: #101E29;
 @padding: 15px;
 @blue: #0881A3;
 @white: #FFFDFB;
@@ -12,8 +13,10 @@
 @sidebarSize: 200px;
 @sidebarC: @blue;
 
+/* layout */
 body {
   font-family: 'Muli', sans-serif;
+  color: @black;
 }
 
 #sidebar {
@@ -58,6 +61,60 @@ body {
   padding: @padding;
   background: @gray;
   overflow: auto;
+  header {
+    margin-bottom: @padding;
+  }
+}
+
+/* general */
+button {
+  padding: 5px 7px;
+  border: 1px solid @blue;
+  border-radius: 2px;
+  background: transparent;
+  color: @blue;
+  cursor: pointer;
+  &:focus {
+    outline: none;
+  }
+}
+
+a {
+  color: lighten(@blue, 5%);
+}
+
+form {
+  @formMargin: @padding/2;
+  width: 100%;
+  label,
+  .serial-input-wrapper {
+    display: block;
+    float: left;
+  }
+  label {
+    clear: left;
+    &:not(:first-child) {
+      margin-top: @formMargin;
+      + .serial-input-wrapper {
+        margin-top: @formMargin;
+      }
+    }
+    + .serial-input-wrapper {
+      padding-left: @padding;
+    }
+  }
+  .serial-input-wrapper .err-msg {
+    color: darken(@pink, 50%);
+    padding-left: @padding;
+  }
+  input:focus {
+    outline: none;
+  }
+  button[type=submit] {
+    clear: left;
+    float: left;
+    margin-top: @formMargin;
+  }
 }
 
 .user-icon {
@@ -83,11 +140,16 @@ body {
     border-radius: @userSize @userSize 0 0;
   }
 }
-/*@import 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css';
-nav li a {
-  text-decoration: none;
+
+/* page- or component-specific */
+#people {
+  #create-person {
+    display: flex;
+    margin-top: @padding;
+  }
 }
-nav li a.active {
-  text-decoration: none;
-  border-bottom: 2px solid;
-}*/
+
+#create-person {
+  padding: @padding;
+  background: @white;
+}

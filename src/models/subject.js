@@ -1,7 +1,9 @@
-import BaseModel from 'base-model'
+import BaseModel from 'models/base-model'
 
-export default SubjectModel = BaseModel.extend({
+let SubjectModel = BaseModel.extend({
   defaults: {
     name: ''
   }
 })
+
+export default SubjectModel

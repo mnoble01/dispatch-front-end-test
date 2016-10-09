@@ -1,10 +1,18 @@
-import BaseModel from 'base-model'
+import BaseModel from 'models/base-model'
+import Backbone from 'backbone'
+import BBLocalStorage from 'backbone.localstorage'
+console.log(BBLocalStorage)
 
-export default PersonModel = BaseModel.extend({
-  defaults () {// is function so 'subjects' array is not shared
+let PersonModel = BaseModel.extend({
+  defaults () { // is function so 'subjects' array is not shared
     return {
       name: '',
       subjects: []
     }
-  }
+  },
+
+  localStorage: new BBLocalStorage('PersonModel')
+  // BBLocalStorage.setPrefix('person')
 })
+
+export default PersonModel
