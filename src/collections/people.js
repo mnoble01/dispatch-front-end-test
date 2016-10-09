@@ -1,12 +1,14 @@
-import BBCollection from 'backbone-collection'
+import Backbone from 'backbone'
 import PersonModel from 'models/person'
 import BBLocalStorage from 'backbone.localstorage'
 
-export default PersonCollection = BBCollection.extend({
+let PersonCollection = Backbone.Collection.extend({
   model: PersonModel,
+  idAttribute: 'name',
 
   comparator: 'name',
 
-  // localStorage: LocalStorage.setPrefix('people')
-  localStorage: new BBLocalStorage('PersonModel')
+  localStorage: new BBLocalStorage('PeopleCollection')
 })
+
+export default PersonCollection

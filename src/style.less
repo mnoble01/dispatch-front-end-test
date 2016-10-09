@@ -143,9 +143,25 @@ form {
 
 /* page- or component-specific */
 #people {
+  overflow: hidden;
   #create-person {
     display: flex;
     margin-top: @padding;
+  }
+  .person {
+    display: block;
+    width: 100%;
+    padding: @padding/2;
+    &:not(:last-child) {
+      border-bottom: 1px solid darken(@gray, 10%);
+    }
+    .name {
+      font-weight: bold;
+    }
+    .subjects {
+      font-size: smaller;
+      margin-top: @padding/3;
+    }
   }
 }
 

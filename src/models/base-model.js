@@ -1,8 +1,6 @@
-// import BBModel from 'backbone-model'
 import Backbone from 'backbone'
-let BBModel = Backbone.Model
 
-let BaseModel = BBModel.extend({
+let BaseModel = Backbone.Model.extend({
 })
 
 export default BaseModel

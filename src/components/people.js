@@ -1,33 +1,42 @@
 import React, {Component} from 'react'
-// import Backbone from 'backbone-react-component';
-import BackboneReact from 'backbone-react-component';
+import BackboneReactComponent from 'backbone-react-component';
 import Button from 'react-button'
 import {BasicForm, InputField} from 'react-serial-forms'
 
 import Header from 'components/header'
 import PersonModel from 'models/person'
+import PersonCollection from 'collections/people'
 import NAV_LINKS from 'lib/nav-links'
 
 export class Person extends Component {
+  mixins: [BackboneReactComponent]
+
+  constructor (...args) {
+    super(...args)
+    this.state = {
+      model: this.props.model
+    }
+  }
+
   render () {
     return (
-      <div>
-        <div className='name'>{this.props.name}</div>
-        <div className='subjects'>{this.props.subjects}</div>
+      <div className='person'>
+        <div className='name'>{this.state.model.get('name')}</div>
+        <div className='subjects'>Expert in: {this.state.model.get('subjects')}</div>
       </div>
     )
   }
 }
 
 export class CreatePerson extends Component {
-  mixins: [BackboneReact.Component.mixin]
+  mixins: [BackboneReactComponent]
 
   constructor (...args) {
     super(...args)
+    console.log(this.props.collection.cid)
     this.state = {
       model: new PersonModel
     }
-    console.log('model', this.state.model)
   }
 
   onSubmit (e) {
@@ -37,22 +46,13 @@ export class CreatePerson extends Component {
         console.log(errs)
         return
       }
-      this.state.model.save(this.refs.form.serialize())
+      this.state.model.set(this.refs.form.serialize())
+      this.props.collection.add(this.state.model).save()
+      this.props.removeHandler()
     })
   }
 
   render () {
-      // <Form ref='form'>
-      //   <Field name='name' label='Name'type='text' validators={['required']} />
-      //   <Field name='subjects' label='Expertise'type='text' />
-      // </Form>
-      // <button onClick={this.submitForm.bind(this)}>Submit</button>
-    // let schema = (
-    //   <Schema>
-    //     <Property name='name' label='Name' />
-    //     <Property name='subjects' label='Expertise' />
-    //   </Schema>
-    // )
     return (
       <div id='create-person'>
         <BasicForm ref='form' onSubmit={this.onSubmit.bind(this)}>
@@ -68,19 +68,22 @@ export class CreatePerson extends Component {
 }
 
 export default class People extends Component {
+  mixins: [BackboneReactComponent]
+
   constructor(...args) {
     super(...args)
     this.state = {
-      showCreateForm: false
+      showCreateForm: false,
+      collection: new PersonCollection
     }
 
     this.toggleCreateForm = this.toggleCreateForm.bind(this)
   }
 
-  static get defaultProps () {
-    return {
-      people: []
-    }
+  componentWillMount () {
+    // console.log(BackboneReactComponent.componentWillMount)
+    // this.getCollection().fetch()
+    this.state.collection.fetch()
   }
 
   toggleCreateForm () {
@@ -88,14 +91,17 @@ export default class People extends Component {
   }
 
   render () {
+    console.log(this.state.collection.models)
     return (
       <div id='people'>
         <Header text={this.props.pageTitle || this.props.route.pageTitle} />
         {!this.state.showCreateForm && <button onClick={this.toggleCreateForm}>+ Create</button>}
         {this.state.showCreateForm && <button onClick={this.toggleCreateForm}>✕ Cancel</button>}
-        {this.state.showCreateForm && <CreatePerson />}
-        {this.props.people.map((p) => {
-          return <Person props={p}/>
+        {this.state.showCreateForm &&
+          <CreatePerson removeHandler={this.toggleCreateForm} collection={this.state.collection}/>
+        }
+        {this.state.collection.map((p) => {
+          return <Person key={p.get('name')} model={p}/>
         })}
       </div>
     )

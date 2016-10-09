@@ -4,7 +4,7 @@ import {Router, Route, IndexRedirect, hashHistory} from 'react-router'
 import NAV_LINKS from 'lib/nav-links'
 import Nav from 'components/nav'
 import People from 'components/people'
-import pluck from 'lodash.pluck'
+import map from 'lodash/map'
 
 
 class Home extends Component {
@@ -26,7 +26,7 @@ class App extends Component {
             Friends of Friends
             <span className='smile'>:)</span>
           </h4>
-          <Nav links={pluck(NAV_LINKS, 'text')} />
+          <Nav links={map(NAV_LINKS, 'text')} />
         </section>
         <section id='content'>
           {this.props.children}
