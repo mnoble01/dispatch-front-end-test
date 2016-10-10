@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router'
-import dashify from 'dashify'
 
 export default class Nav extends Component {
   static get defaultProps() {

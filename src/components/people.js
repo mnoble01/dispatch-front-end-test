@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import BackboneReactComponent from 'backbone-react-component'
-// import Button from 'react-button'
 import {BasicForm, InputField} from 'react-serial-forms'
 import ReactTags from 'react-tag-autocomplete'
 import includes from 'lodash/includes'
@@ -92,8 +91,7 @@ export class CreatePerson extends Component {
       attrs.name = titleize(attrs.name.trim())
       this.state.model.set(attrs)
       // save model to collection
-      this.props.collection.add(this.state.model)
-      this.state.model.save()
+      this.props.collection.add(this.state.model).save()
       this.props.removeHandler()
     })
   }
@@ -120,7 +118,6 @@ export class CreatePerson extends Component {
   }
 
   render () {
-    // <InputField name='subjects' type='text' validation='required' value='Submit' />
     let tagHint = null
     if (this.state.hasSubjects) {
       tagHint = <span className='hint'>Click tag to remove</span>

@@ -1,5 +1,4 @@
 @import (inline) 'reset-css/reset.css';
-// @import 'https://fonts.googleapis.com/css?family=Nunito:300';
 @import 'https://fonts.googleapis.com/css?family=Muli:300|Cabin+Sketch';
 
 
@@ -233,5 +232,24 @@ form {
 #search {
   select[name=subject] {
     margin-left: @padding;
+  }
+  #search-results {
+    display: block;
+    float: left;
+    margin-top: @padding;
+    width: 100%;
+    .person,
+    .subject {
+      font-weight: bolder;
+    }
+    .search-line {
+      display: block;
+      &:not(:first-child) {
+        padding-left: @padding;
+      }
+      &:not(:last-child):after {
+        content: ','
+      }
+    }
   }
 }
