@@ -46,7 +46,7 @@ export default class MakeFriends extends Component {
     e.preventDefault()
     this.refs.form.validate((errs) => {
       if (errs) {
-        console.log(errs)
+        console.info(errs)
         return
       }
       let data = this.refs.form.serialize()

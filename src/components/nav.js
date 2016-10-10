@@ -15,7 +15,6 @@ export default class Nav extends Component {
         <ul>
           {this.props.links.map((l, i) => {
             let path = l.path
-            console.log(l)
             return <li key={path}>
               <Link to={path} activeClassName='active'> {l.text} </Link>
             </li>

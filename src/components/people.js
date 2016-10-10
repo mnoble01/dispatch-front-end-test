@@ -24,6 +24,9 @@ export class Person extends Component {
 
   render () {
     let subjects = this.state.model.get('subjects').map((s) => s.name).join(' • ')
+    if (!subjects) {
+      subjects = 'nothing'
+    }
     return (
       <div className='person'>
         <div className='name'>{this.state.model.get('name')}</div>
@@ -56,14 +59,12 @@ export class CreatePerson extends Component {
       let suggestions = this.props.collection.map((s) => {
         return {id: s.get('name'), name: s.get('name')}
       })
-      console.log('suggestions', suggestions)
       this.setState({subjectSugg: suggestions})
     })
     this.props.subjectCollection.fetch().done(() => {
       let tags = this.props.subjectCollection.map((s) => {
         return {id: s.get('name'), name: s.get('name')}
       })
-      console.log('tags', tags)
       this.setState({subjectSugg: tags})
     })
   }
@@ -72,7 +73,7 @@ export class CreatePerson extends Component {
     e.preventDefault()
     this.refs.form.validate((errs) => {
       if (errs) {
-        console.log(errs)
+        console.info(errs)
         return
       }
       // TODO fix data so Person.name is title-cased and trimmed,
@@ -90,7 +91,6 @@ export class CreatePerson extends Component {
       attrs.subjects = this.props.subjectCollection
       attrs.name = titleize(attrs.name.trim())
       this.state.model.set(attrs)
-      console.log(attrs)
       // save model to collection
       this.props.collection.add(this.state.model)
       this.state.model.save()

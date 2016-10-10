@@ -7,16 +7,6 @@ import People from 'components/people'
 import map from 'lodash/map'
 
 
-class Home extends Component {
-  render () {
-    return (
-      <div>
-        Hello and welcome! To begin
-      </div>
-    )
-  }
-}
-
 class App extends Component {
   render () {
     return (
