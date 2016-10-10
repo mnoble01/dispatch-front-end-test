@@ -1,6 +1,6 @@
-import BaseModel from 'models/base-model'
+import Backbone from 'backbone'
 
-let PersonModel = BaseModel.extend({
+let PersonModel = Backbone.Model.extend({
   idAttribute: 'name',
 
   defaults () { // function so 'subjects' array is not shared

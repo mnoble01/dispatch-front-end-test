@@ -1,6 +1,6 @@
-import BaseModel from 'models/base-model'
+import Backbone from 'backbone'
 
-let SubjectModel = BaseModel.extend({
+let SubjectModel = Backbone.Model.extend({
   idAttribute: 'name',
 
   defaults: {
