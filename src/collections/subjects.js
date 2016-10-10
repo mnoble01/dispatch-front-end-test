@@ -4,6 +4,7 @@ import BBLocalStorage from 'backbone.localstorage'
 
 let SubjectCollection = Backbone.Collection.extend({
   model: SubjectModel,
+  idAttribute: 'name',
 
   comparator: 'name',
 

@@ -22,9 +22,7 @@ export class Person extends Component {
   }
 
   render () {
-    let subjects = this.state.model.get('subjects')
-    console.log(subjects)
-    subjects = ['one', 'two'].join(' • ')
+    let subjects = this.state.model.get('subjects').map((s) => s.name).join(' • ')
     return (
       <div className='person'>
         <div className='name'>{this.state.model.get('name')}</div>
@@ -42,7 +40,6 @@ export class CreatePerson extends Component {
 
     this.state = {
       model: new PersonModel,
-      collection: new SubjectCollection,
       hasSubjects: false,
       subjectTags: [],
       subjectSugg: [] // suggestions
@@ -54,11 +51,19 @@ export class CreatePerson extends Component {
   }
 
   componentWillMount () {
-    this.state.collection.fetch().done(() => {
-      let suggestions = this.state.collection.map((s) => {
+    this.props.collection.fetch().done(() => {
+      let suggestions = this.props.collection.map((s) => {
         return {id: s.get('name'), name: s.get('name')}
       })
+      console.log('suggestions', suggestions)
       this.setState({subjectSugg: suggestions})
+    })
+    this.props.subjectCollection.fetch().done(() => {
+      let tags = this.props.subjectCollection.map((s) => {
+        return {id: s.get('name'), name: s.get('name')}
+      })
+      console.log('tags', tags)
+      this.setState({subjectSugg: tags})
     })
   }
 
@@ -71,16 +76,21 @@ export class CreatePerson extends Component {
       }
       // TODO fix data so Person.name is title-cased and trimmed,
       // same with Subject.name
-      // TODO save new subjectTags first
       // save subjects
-      let subjects = this.state.subjectTags
-      console.log(subjects)
+      let subjects = this.state.subjectTags.map((s) => {
+        return {id: s.name, name: s.name}
+      })
+      this.props.subjectCollection
+        .reset(subjects, {remove: true, merge: true})
+      this.props.subjectCollection.each((s) => s.save())
       // compose & set model attrs
       let attrs = this.refs.form.serialize()
-      attrs.subjects = subjects
+      attrs.subjects = this.props.subjectCollection
       this.state.model.set(attrs)
+      console.log(attrs)
       // save model to collection
-      this.props.collection.add(this.state.model).save()
+      this.props.collection.add(this.state.model)
+      this.state.model.save()
       this.props.removeHandler()
     })
   }
@@ -128,6 +138,7 @@ export class CreatePerson extends Component {
             handleDelete={this.onTagDelete}
             handleAddition={this.onTagAdd}
             allowNew={true}
+            autofocus={false}
             placeholder=' '
             minQueryLength={1} />
           <button name='submit' type='submit' value='Submit'>Submit</button>
@@ -142,18 +153,19 @@ export default class People extends Component {
 
   constructor(...args) {
     super(...args)
+
     this.state = {
       showCreateForm: false,
-      collection: new PersonCollection
+      collection: new PersonCollection,
+      subjectCollection: new SubjectCollection
     }
 
     this.toggleCreateForm = this.toggleCreateForm.bind(this)
   }
 
   componentWillMount () {
-    // console.log(BackboneReactComponent.componentWillMount)
-    // this.getCollection().fetch()
     this.state.collection.fetch()
+    this.state.subjectCollection.fetch()
   }
 
   toggleCreateForm () {
@@ -161,14 +173,16 @@ export default class People extends Component {
   }
 
   render () {
-    console.log(this.state.collection.models)
     return (
       <div id='people'>
         <Header text={this.props.pageTitle || this.props.route.pageTitle} />
         {!this.state.showCreateForm && <button onClick={this.toggleCreateForm}>+ Create</button>}
         {this.state.showCreateForm && <button onClick={this.toggleCreateForm}>✕ Cancel</button>}
         {this.state.showCreateForm &&
-          <CreatePerson removeHandler={this.toggleCreateForm} collection={this.state.collection}/>
+          <CreatePerson
+            removeHandler={this.toggleCreateForm}
+            collection={this.state.collection}
+            subjectCollection={this.state.subjectCollection} />
         }
         {this.state.collection.map((p) => {
           return <Person key={p.get('name')} model={p}/>
