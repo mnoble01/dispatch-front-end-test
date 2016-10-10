@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router'
+import dashify from 'dashify'
 
 export default class Nav extends Component {
   static get defaultProps() {
@@ -13,10 +14,10 @@ export default class Nav extends Component {
       <nav>
         <ul>
           {this.props.links.map((l, i) => {
-            // assuming unique link text
-            let href = l.toLowerCase()
-            return <li key={href}>
-              <Link to={href} activeClassName='active'> {l} </Link>
+            let path = l.path
+            console.log(l)
+            return <li key={path}>
+              <Link to={path} activeClassName='active'> {l.text} </Link>
             </li>
           })}
         </ul>

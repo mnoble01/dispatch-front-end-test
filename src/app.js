@@ -26,7 +26,7 @@ class App extends Component {
             Friends of Friends
             <span className='smile'>:)</span>
           </h4>
-          <Nav links={map(NAV_LINKS, 'text')} />
+          <Nav links={NAV_LINKS} />
         </section>
         <section id='content'>
           {this.props.children}

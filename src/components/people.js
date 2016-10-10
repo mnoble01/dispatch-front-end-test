@@ -1,9 +1,10 @@
 import React, {Component} from 'react'
-import BackboneReactComponent from 'backbone-react-component';
+import BackboneReactComponent from 'backbone-react-component'
 // import Button from 'react-button'
 import {BasicForm, InputField} from 'react-serial-forms'
 import ReactTags from 'react-tag-autocomplete'
 import includes from 'lodash/includes'
+import titleize from 'titleize'
 
 import Header from 'components/header'
 import PersonModel from 'models/person'
@@ -78,7 +79,8 @@ export class CreatePerson extends Component {
       // same with Subject.name
       // save subjects
       let subjects = this.state.subjectTags.map((s) => {
-        return {id: s.name, name: s.name}
+        let name = titleize(s.name.trim())
+        return {id: name, name}
       })
       this.props.subjectCollection
         .reset(subjects, {remove: true, merge: true})
@@ -86,6 +88,7 @@ export class CreatePerson extends Component {
       // compose & set model attrs
       let attrs = this.refs.form.serialize()
       attrs.subjects = this.props.subjectCollection
+      attrs.name = titleize(attrs.name.trim())
       this.state.model.set(attrs)
       console.log(attrs)
       // save model to collection
@@ -108,7 +111,6 @@ export class CreatePerson extends Component {
     let tags = this.state.subjectTags
     let existingTagNames = tags.map((t) => t.name)
     if (!includes(existingTagNames, tag.name)) { // don't allow duplicates
-      // TODO maybe allow subject collection to handle this
       tags.push(tag)
       this.setState({
         tags,
@@ -175,7 +177,7 @@ export default class People extends Component {
   render () {
     return (
       <div id='people'>
-        <Header text={this.props.pageTitle || this.props.route.pageTitle} />
+        <Header text={this.props.route.pageTitle} />
         {!this.state.showCreateForm && <button onClick={this.toggleCreateForm}>+ Create</button>}
         {this.state.showCreateForm && <button onClick={this.toggleCreateForm}>✕ Cancel</button>}
         {this.state.showCreateForm &&

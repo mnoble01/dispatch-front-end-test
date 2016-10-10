@@ -92,6 +92,8 @@ a {
 form {
   @formMargin: @padding/2;
   width: 100%;
+  display: block;
+  clear: both;
   label,
   .serial-input-wrapper,
   .react-tags {
@@ -195,4 +197,35 @@ form {
 #create-person {
   padding: @padding;
   background: @white;
+}
+
+#make-friends {
+  form {
+    .serial-input-wrapper {
+      clear: left;
+      &:not(:first-child) {
+        margin-top: @padding/2;
+      }
+    }
+  }
+
+  #friends-list {
+    display: block;
+    clear: both;
+    margin-top: @padding;
+    float: left;
+  }
+}
+
+#friends-list {
+  width: 100%;
+  overflow: hidden;
+  .friend-pair {
+    display: block;
+    padding: @padding/2;
+    width: 100%;
+    &:not(:last-child) {
+      border-bottom: 1px solid darken(@paleGray, 10%);
+    }
+  }
 }

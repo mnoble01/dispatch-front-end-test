@@ -1,5 +1,6 @@
 import Search from 'components/search'
 import People from 'components/people'
+import MakeFriends from 'components/make-friends'
 
 // you can assume unique link text/path (i.e. you can use for child keys)
 const NAV_LINKS = [{
@@ -12,9 +13,9 @@ const NAV_LINKS = [{
   component: People
 }, {
   text: 'Make Friends',
-  path: 'friends'
-  // ,
-  // component: Friends
+  path: 'friends',
+  component: MakeFriends
 }]
+
 
 export default NAV_LINKS
