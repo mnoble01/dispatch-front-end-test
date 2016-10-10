@@ -5,8 +5,6 @@ import PersonCollection from 'collections/people'
 import SubjectCollection from 'collections/subjects'
 import FriendCollection from 'collections/friends'
 import {BasicForm, SelectField} from 'react-serial-forms'
-import includes from 'lodash/includes'
-import map from 'lodash/map'
 import reject from 'lodash/reject'
 
 class SearchResults extends Component {
@@ -15,6 +13,15 @@ class SearchResults extends Component {
     let subject = this.props.subjectName
     let path = this.props.path
 
+    if (this.props.isExpert) {
+      return (
+        <div id='search-results'>
+          <span className='person'>${person}</span> should talk to themselves,
+          because they're an expert in <span className='subject'>{subject}</span>.
+          I wouldn't suggest doing that in public, though.
+        </div>
+      )
+    }
     if (!path.length) {
       return (
         <div id='search-results'>
@@ -48,7 +55,7 @@ class SearchResults extends Component {
         {intro}
         {path.map((pers, i) => {
           if (i > 0) {
-            return <span className='search-line'>
+            return <span className='search-line'k key={i}>
               who can introduce <span className='person'>{path[i-1].get('name')}</span> to <span className='person'>{pers.get('name')}</span>
             </span>
           }
@@ -95,12 +102,14 @@ export default class Search extends Component {
   }
 
   render () {
+    let person = this.state.personCollection.findWhere({name: this.state.personName})
+    let isExpert = person && person.isExpertIn(this.state.subjectName)
     return (
       <div id='search'>
         <Header text={this.props.route.pageTitle} />
         {this.renderForm()}
         {this.state.search &&
-          <SearchResults path={this.state.path} personName={this.state.personName} subjectName={this.state.subjectName} />}
+          <SearchResults path={this.state.path} personName={this.state.personName} subjectName={this.state.subjectName} isExpert={isExpert} />}
       </div>
     )
   }
@@ -134,18 +143,12 @@ export default class Search extends Component {
 
   search (personName, subjectName) {
     let people = this.state.personCollection.clone()
-    // let people = this.state.personCollection.clone().filter((p) => {
-    //   return includes(person.get('subjects'), subject)
-    // })
+    people.each((p) => p.set('visited', false))
     let person = people.findWhere({name: personName})
     let friends = new FriendCollection
     friends.fetch().done(() => {
       let path = []
-      if (this.searchRecurse(people, friends, person, subjectName, path)) {
-        console.log('found someone', path)
-      } else {
-        console.log('not found')
-      }
+      this.searchRecurse(people, friends, person, subjectName, path)
       this.setState({
         search: true,
         path,
@@ -154,44 +157,23 @@ export default class Search extends Component {
         key: new Date // reset form trickery
       })
     })
-    // friends.reset(friends.filter()
-    // get people who are experts in the subject
   }
 
   searchRecurse (people, friends, person, subject, path) {
-    console.log(person.get('name'), person.get('visited'), people.findWhere({name: person.get('name')}).get('visited'))
-    let subjectNames = map(person.get('subjects'), 'name')
-    // person.set('visited', true)
-    // if (person.get('visited')) {
-    //   return false
-    // }
     person.set('visited', true)
-    console.log('searchRecurse', person.get('name'))
-    // console.log(person.get('name'), subjectNames, subject)
-    // console.log('looking for', subject, 'with', person, subjectNames)
-    if (includes(subjectNames, subject)) {
-      // this.setState({searchResults: `${person} should talk to themselves, because they're an expert in ${subject}. I wouldn't suggest doing that in public, though.`})
-      console.log('subjects included!')
-      // return true
+    if (person.isExpertIn(subject)) {
       return true
     }
-    console.log(people.pluck('name'), people.pluck('visited'))
-    // if (people.every((p) => p.get('visited') && p.get('name') !== person.get('name'))) {
     if (people.every((p) => p.get('visited'))) {
-      console.log(people.pluck('visited'))
-      console.log('everyone visited, none found')
       return false
     }
     let friendModels = reject(friends.of(person), (f) => {
       return people.get(f.other(person)).get('visited')
     })
     let friendsOfPerson = new FriendCollection(friendModels)
-    console.log('friendsOfPerson', person.get('name'), friendsOfPerson)
     return friendsOfPerson.some((f) => {
       let otherPerson = people.get(f.other(person))
       let found = this.searchRecurse(people, friends, otherPerson, subject, path)
-      console.log('found?', found)
-      console.log(friendsOfPerson)
       if (found) {
         path.splice(0, 0, otherPerson)
       }
