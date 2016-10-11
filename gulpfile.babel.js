@@ -46,7 +46,10 @@ gulp.task('images', () => {
 })
 
 gulp.task('js', () => {
-  return browserify({debug: true}) // TODO only debug if !env.PROD
+  return browserify({
+      debug: true,
+      paths: [DIRS.SRC]
+    })
     .transform(babelify, {presets: ['es2015', 'react']})
     .require(PATHS.APP_ENTRY, {entry: true})
     .bundle()

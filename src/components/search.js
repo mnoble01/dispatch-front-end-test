@@ -16,8 +16,8 @@ class SearchResults extends Component {
     if (this.props.isExpert) {
       return (
         <div id='search-results'>
-          <span className='person'>${person}</span> should talk to themselves,
-          because they're an expert in <span className='subject'>{subject}</span>.
+          <span className='person'>{person}</span> should talk to herself,
+          because she's an expert in <span className='subject'>{subject}</span>.
           I wouldn't suggest doing that in public, though.
         </div>
       )
