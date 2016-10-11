@@ -117,7 +117,9 @@ export default class Search extends Component {
   renderForm () {
     if (this.state.personCollection.isEmpty()) {
       return (
-        `There aren't any people to search for yet. Go <Link to='people'>here</Link> to create some.`
+        <span>
+          There aren't any people to search for yet. Go <Link to='people'>here</Link> to create some.
+        </span>
       )
     }
     let people = this.state.personCollection.map((p) =>
