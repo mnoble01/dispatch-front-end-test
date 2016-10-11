@@ -146,7 +146,7 @@ form {
 }
 
 .user-icon {
-  @userSize: 90px;
+  @userSize: 15px;
   width: @userSize;
   height: @userSize;
   &:before,
@@ -183,12 +183,17 @@ form {
     &:not(:last-child) {
       border-bottom: 1px solid darken(@paleGray, 10%);
     }
+    .user-icon {
+      float: left;
+      margin-right: @padding/2;
+    }
     .name {
       font-weight: bold;
     }
     .subjects {
       font-size: smaller;
       margin-top: @padding/3;
+      margin-left: @padding*1.5;
     }
   }
 }

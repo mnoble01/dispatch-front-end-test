@@ -28,6 +28,7 @@ export class Person extends Component {
     }
     return (
       <div className='person'>
+        <div className='user-icon'></div>
         <div className='name'>{this.state.model.get('name')}</div>
         <div className='subjects'>Expert in: {subjects}</div>
       </div>
