@@ -45,7 +45,7 @@ class SearchResults extends Component {
     if (path.length === 1) {
       return (
         <div id='search-results'>
-        {intro}, {outro}
+        {intro}{outro}
         </div>
       )
     }
